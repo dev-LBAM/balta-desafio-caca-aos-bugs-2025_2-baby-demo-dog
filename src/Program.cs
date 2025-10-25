@@ -1,10 +1,13 @@
 using BugStore.Data;
 using BugStore.Handlers.Customers;
+using BugStore.Handlers.Orders;
 using BugStore.Handlers.Products;
 using BugStore.Models;
 using BugStore.Requests.Customers;
+using BugStore.Requests.Orders;
 using BugStore.Requests.Products;
 using BugStore.Responses.Customers;
+using BugStore.Responses.Orders;
 using BugStore.Responses.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -139,7 +142,22 @@ app.MapDelete("/v1/products/{id}", async ([FromRoute] Guid id, AppDbContext db, 
 });
 
 // Orders Endpoints
-app.MapGet("/v1/orders/{id}", () => "Hello World!");
-app.MapPost("/v1/orders", () => "Hello World!");
+app.MapGet("/v1/orders/{id}", async ([FromRoute] Guid id, AppDbContext db, CancellationToken ct) =>
+{
+    var handler = new OrderHandler(db);
+    GetByIdOrdersRequest request = new(OrderId: id);
+    var result = await handler.GetById(request, ct);
+    if (result == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(result);
+});
+app.MapPost("/v1/orders", async(CreateOrdersRequest request, AppDbContext db, CancellationToken ct) =>
+{
+    var handler = new OrderHandler(db);
+    CreateOrdersResponse result = await handler.CreateAsync(request, ct);
+    return Results.Created($"/v1/orders/{result.OrderId}", result);
+});
 
 app.Run();
