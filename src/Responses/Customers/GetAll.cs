@@ -1,9 +1,9 @@
 namespace BugStore.Responses.Customers;
 
-public record UpdateCustomersResponse(
+public record GetAllCustomersResponse(
     Guid Id,
     string Name,
     string Email,
     string Phone,
-    DateTime BirthDate
+    string BirthDate
 );

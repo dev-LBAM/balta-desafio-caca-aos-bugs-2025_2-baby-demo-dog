@@ -1,6 +1,9 @@
 namespace BugStore.Responses.Customers;
 
-public class GetById
-{
-    
-}
+public record GetByIdCustomersResponse(
+    Guid Id,
+    string Name,
+    string Email,
+    string Phone,
+    DateTime BirthDate
+);

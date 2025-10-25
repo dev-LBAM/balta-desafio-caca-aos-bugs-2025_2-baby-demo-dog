@@ -1,6 +1,8 @@
 namespace BugStore.Requests.Customers;
 
-public class Create
-{
-    
-}
+public record CreateCustomersRequest(
+    string Name,
+    string Email,
+    string Phone,
+    DateTime BirthDate
+);

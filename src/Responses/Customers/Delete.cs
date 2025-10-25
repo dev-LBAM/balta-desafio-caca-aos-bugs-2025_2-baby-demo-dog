@@ -1,6 +1,9 @@
 namespace BugStore.Responses.Customers;
 
-public class Delete
-{
-    
-}
+public record DeleteCustomersResponse(
+    Guid Id,
+    string Name,
+    string Email,
+    string Phone,
+    DateTime BirthDate
+);

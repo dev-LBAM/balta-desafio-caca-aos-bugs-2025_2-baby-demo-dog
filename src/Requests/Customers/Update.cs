@@ -1,6 +1,8 @@
 namespace BugStore.Requests.Customers;
 
-public class Update
-{
-    
-}
+public record UpdateCustomersRequest(
+    string? Name,
+    string? Email,
+    string? Phone,
+    string? BirthDate
+);
