@@ -1,6 +1,8 @@
 namespace BugStore.Requests.Products;
 
-public class Update
-{
-    
-}
+public record UpdateProductsRequest(
+    string Title,
+    string Description,
+    string Slug,
+    decimal Price
+);

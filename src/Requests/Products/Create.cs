@@ -1,6 +1,8 @@
 namespace BugStore.Requests.Products;
 
-public class Create
-{
-    
-}
+public record CreateProductsRequest(
+    string Title,
+    string Description,
+    string Slug,
+    decimal Price
+);

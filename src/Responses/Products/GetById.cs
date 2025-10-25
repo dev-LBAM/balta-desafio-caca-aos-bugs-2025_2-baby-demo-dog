@@ -1,6 +1,9 @@
 namespace BugStore.Responses.Products;
 
-public class GetById
-{
-    
-}
+public record GetByIdProductsResponse(
+    Guid Id,
+    string Title,
+    string Description,
+    string Slug,
+    decimal Price
+);

@@ -1,6 +1,6 @@
 namespace BugStore.Responses.Products;
 
-public record CreateProductsResponse(
+public record GetAllProductsResponse(
     Guid Id,
     string Title,
     string Description,

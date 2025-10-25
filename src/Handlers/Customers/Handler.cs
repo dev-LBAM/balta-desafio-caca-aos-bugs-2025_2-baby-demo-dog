@@ -10,7 +10,7 @@ public class CustomerHandler(AppDbContext db)
 {
     private readonly AppDbContext _db = db;
 
-    public async Task<CreateCustomerResponse> Create(CreateCustomersRequest request)
+    public async Task<CreateCustomerResponse> Create(CreateCustomersRequest request, CancellationToken ct)
     {
         Customer customerCreate = new()
         {
@@ -22,7 +22,7 @@ public class CustomerHandler(AppDbContext db)
         };
 
         _db.Customers.Add(customerCreate);
-        await  _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
 
         CreateCustomerResponse customerResponse = new
         (
@@ -36,7 +36,7 @@ public class CustomerHandler(AppDbContext db)
         return customerResponse;
     }
 
-    public async Task<List<GetAllCustomersResponse>> GetAll()
+    public async Task<List<GetAllCustomersResponse>> GetAll(CancellationToken ct)
     {
         return await _db.Customers
             .Select(c => new GetAllCustomersResponse(
@@ -46,12 +46,12 @@ public class CustomerHandler(AppDbContext db)
                 c.Phone,
                 c.BirthDate.ToString("yyyy-MM-dd")
             ))
-            .ToListAsync();
+            .ToListAsync(ct);
     }
 
-    public async Task<GetByIdCustomersResponse?> GetById(GetByIdCustomersRequest request)
+    public async Task<GetByIdCustomersResponse?> GetById(GetByIdCustomersRequest request, CancellationToken ct)
     {
-        Customer? customer = await _db.Customers.FindAsync(request.Id);
+        Customer? customer = await _db.Customers.FindAsync([request.Id, ct], cancellationToken: ct);
 
         if (customer == null)
         {
@@ -67,9 +67,9 @@ public class CustomerHandler(AppDbContext db)
         );
     }
 
-    public async Task<DeleteCustomersResponse?> Delete(DeleteCustomersRequest request)
+    public async Task<DeleteCustomersResponse?> Delete(DeleteCustomersRequest request, CancellationToken ct)
     {
-        Customer? customer = await _db.Customers.FindAsync(request.Id);
+        Customer? customer = await _db.Customers.FindAsync([request.Id, ct], cancellationToken: ct);
         if (customer == null)
         {
             return null;
@@ -87,9 +87,9 @@ public class CustomerHandler(AppDbContext db)
         );
     }
 
-    public async Task<UpdateCustomersResponse?> Update(Guid id,UpdateCustomersRequest request)
+    public async Task<UpdateCustomersResponse?> Update(Guid id, UpdateCustomersRequest request, CancellationToken ct)
     {
-        Customer? customer = await _db.Customers.FindAsync(id);
+        Customer? customer = await _db.Customers.FindAsync([id, ct], cancellationToken: ct);
         if (customer == null)
         {
             return null;
@@ -103,7 +103,7 @@ public class CustomerHandler(AppDbContext db)
             customer.BirthDate = DateTime.Parse(request.BirthDate);
         }
 
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(ct);
         return new UpdateCustomersResponse
         (
             customer.Id,

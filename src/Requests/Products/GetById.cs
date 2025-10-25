@@ -1,6 +1,3 @@
 namespace BugStore.Requests.Products;
 
-public class GetById
-{
-    
-}
+public record GetByIdProductsRequest(Guid Id);
